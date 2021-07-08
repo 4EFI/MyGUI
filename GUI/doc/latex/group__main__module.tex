@@ -1,0 +1,99 @@
+\hypertarget{group__main__module}{}\doxysection{Main Module}
+\label{group__main__module}\index{Main Module@{Main Module}}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{group__main__module_ga3ccdeda78a61c0a23f4cac412af03227}{Button\+::\+Show}} (sf\+::\+Render\+Window \&window)
+\begin{DoxyCompactList}\small\item\em Function that displays a button on the window. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{group__main__module_gabca1f60fd91523ed5bd71422484c3cd3}{Button\+::\+Is\+Pressed}} (sf\+::\+Render\+Window \&window)
+\begin{DoxyCompactList}\small\item\em Function shows if the button is pressed. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{group__main__module_ga4c5869b4600f107f675d051eb10e8505}\label{group__main__module_ga4c5869b4600f107f675d051eb10e8505}} 
+bool {\bfseries Button\+::\+Is\+Clicked} (sf\+::\+Render\+Window \&window)
+\item 
+\mbox{\Hypertarget{group__main__module_ga82c16ce8e62c3e2ef59048fd2439efed}\label{group__main__module_ga82c16ce8e62c3e2ef59048fd2439efed}} 
+void {\bfseries Button\+::\+Set\+Texture} (const char path\mbox{[}$\,$\mbox{]})
+\item 
+\mbox{\Hypertarget{group__main__module_gaf513f083b1dea0b62884980851ba9354}\label{group__main__module_gaf513f083b1dea0b62884980851ba9354}} 
+void {\bfseries Button\+::\+Set\+Scale} (sf\+::\+Vector2f scale)
+\item 
+\mbox{\Hypertarget{group__main__module_ga843f2e7d8c486c8d582f5af50d3955e0}\label{group__main__module_ga843f2e7d8c486c8d582f5af50d3955e0}} 
+void {\bfseries Button\+::\+Set\+Position} (sf\+::\+Vector2f position)
+\item 
+\mbox{\Hypertarget{group__main__module_ga71b54e7a3f378952f09f676e10c16232}\label{group__main__module_ga71b54e7a3f378952f09f676e10c16232}} 
+int {\bfseries Button\+::\+Get\+Index} ()
+\item 
+\mbox{\Hypertarget{group__main__module_gabdaa47de3c3937085cfaffedd1fc4f7a}\label{group__main__module_gabdaa47de3c3937085cfaffedd1fc4f7a}} 
+void {\bfseries Button\+::\+Set\+Text} (sf\+::\+Text $\ast$text)
+\item 
+\mbox{\Hypertarget{group__main__module_ga41e6ba6e6fcb6e46dd3be3ee16870859}\label{group__main__module_ga41e6ba6e6fcb6e46dd3be3ee16870859}} 
+void {\bfseries Button\+::\+Set\+Text\+Length} (float length)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{group__main__module_gabca1f60fd91523ed5bd71422484c3cd3}\label{group__main__module_gabca1f60fd91523ed5bd71422484c3cd3}} 
+\index{Main Module@{Main Module}!IsPressed@{IsPressed}}
+\index{IsPressed@{IsPressed}!Main Module@{Main Module}}
+\doxysubsubsection{\texorpdfstring{IsPressed()}{IsPressed()}}
+{\footnotesize\ttfamily bool Button\+::\+Is\+Pressed (\begin{DoxyParamCaption}\item[{sf\+::\+Render\+Window \&}]{window }\end{DoxyParamCaption})}
+
+
+
+Function shows if the button is pressed. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em window} & The window where the button press will be read\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+TRUE -\/ the button is pressed else -\/ FALSE
+\end{DoxyReturn}
+Example using 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\mbox{\hyperlink{class_button}{Button}} button;}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{keywordflow}{if}(button.\mbox{\hyperlink{group__main__module_gabca1f60fd91523ed5bd71422484c3cd3}{IsPressed}}(window))}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{    ...}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+ \mbox{\Hypertarget{group__main__module_ga3ccdeda78a61c0a23f4cac412af03227}\label{group__main__module_ga3ccdeda78a61c0a23f4cac412af03227}} 
+\index{Main Module@{Main Module}!Show@{Show}}
+\index{Show@{Show}!Main Module@{Main Module}}
+\doxysubsubsection{\texorpdfstring{Show()}{Show()}}
+{\footnotesize\ttfamily void Button\+::\+Show (\begin{DoxyParamCaption}\item[{sf\+::\+Render\+Window \&}]{window }\end{DoxyParamCaption})}
+
+
+
+Function that displays a button on the window. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em window} & The window where the button will be displayed\\
+\hline
+\end{DoxyParams}
+Example using 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordtype}{int} main()}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{    sf::RenderWindow window(sf::VideoMode(1000, 700), \textcolor{stringliteral}{"{}Example"{}});}
+\DoxyCodeLine{}
+\DoxyCodeLine{    \mbox{\hyperlink{class_button}{Button}} button;}
+\DoxyCodeLine{}
+\DoxyCodeLine{    \textcolor{keywordflow}{while}(\textcolor{keyword}{true})}
+\DoxyCodeLine{    \{}
+\DoxyCodeLine{        window.clear();}
+\DoxyCodeLine{}
+\DoxyCodeLine{        button.\mbox{\hyperlink{group__main__module_ga3ccdeda78a61c0a23f4cac412af03227}{Show}}(window);}
+\DoxyCodeLine{}
+\DoxyCodeLine{        window.display();}
+\DoxyCodeLine{    \}}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+ 
