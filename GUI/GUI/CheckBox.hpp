@@ -5,6 +5,8 @@ class CheckBox;
 
 static std::vector<CheckBox*> checkBoxes;
 
+void Loop(sf::Event &event, sf::RenderWindow &window);
+
 class CheckBox
 {
 private:
@@ -24,7 +26,6 @@ public:
 
     void Render(sf::RenderWindow *window);
 
-	void Loop(sf::Event &event, sf::RenderWindow &window);
 	bool GetState();
 	void SetPosition(float newX, float newY);
 };
