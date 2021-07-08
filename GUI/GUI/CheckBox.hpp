@@ -5,6 +5,8 @@ class CheckBox;
 
 static std::vector<CheckBox*> checkBoxes;
 
+void Loop(sf::Event &event, sf::RenderWindow &window);
+
 class CheckBox
 {
 private:
@@ -17,16 +19,12 @@ private:
     sf::RectangleShape rect;
     sf::RectangleShape box;
 
-    void Check(sf::Event &event, sf::RenderWindow &window);
-
 public:
     CheckBox(float weight, float height, int posX, int posY);
-
+    void Check(sf::Event &event, sf::RenderWindow &window);
     void Render(sf::RenderWindow *window);
-
-	void Loop(sf::Event &event, sf::RenderWindow &window);
-	bool GetState();
-	void SetPosition(float newX, float newY);
+    bool GetState();
+    void SetPosition(float newX, float newY);
 };
 
 //-----------------------------------------------------------------------------
@@ -84,7 +82,7 @@ bool CheckBox::GetState()
     return state;
 }
 
-void CheckBox::Loop(Event &event, RenderWindow &window)
+void Loop(Event &event, RenderWindow &window)
 {
     int size = checkBoxes.size();
     for(int i = 0; i < size; i++)
