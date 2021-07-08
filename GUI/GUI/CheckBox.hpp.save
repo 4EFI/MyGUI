@@ -17,16 +17,14 @@ private:
     sf::RectangleShape rect;
     sf::RectangleShape box;
 
-    //void Check(sf::RenderWindow &window);
+    void Check(sf::Event &event, sf::RenderWindow &window);
 
 public:
     CheckBox(float weight, float height, int posX, int posY);
 
-    void Check(sf::RenderWindow &window);
-
     void Render(sf::RenderWindow *window);
-	void Loop  (sf::RenderWindow &window);
 
+	void Loop(sf::Event &event, sf::RenderWindow &window);
 	bool GetState();
 	void SetPosition(float newX, float newY);
 };
@@ -35,7 +33,7 @@ public:
 //{     CheckBox realization
 //-----------------------------------------------------------------------------
 
-void CheckBox::Check(sf::RenderWindow &window)
+void CheckBox::Check(sf::Event &event, sf::RenderWindow &window)
 {
     sf::Vector2i pixelPos = sf::Mouse::getPosition(window);
 
@@ -52,7 +50,7 @@ void CheckBox::Check(sf::RenderWindow &window)
                 pr = true;
             }
 
-            if  (pr && !sf::Mouse::isButtonPressed(sf::Mouse::Left))
+            if  (pr && event.type == sf::Event::MouseButtonReleased)
             {
                 pr = false;
                 state = true;
@@ -61,12 +59,12 @@ void CheckBox::Check(sf::RenderWindow &window)
 
         if (state)
         {
-            if (!pr && sf::Mouse::isButtonPressed(sf::Mouse::Left))
+            if (!pr && event.type == sf::Event::MouseButtonPressed)
             {
                 pr = true;
             }
 
-            if (pr && !sf::Mouse::isButtonPressed(sf::Mouse::Left))
+            if (pr && event.type == sf::Event::MouseButtonReleased)
             {
                 pr = false;
                 state = false;
@@ -86,12 +84,12 @@ bool CheckBox::GetState()
     return state;
 }
 
-void CheckBox::Loop(sf::RenderWindow &window)
+void CheckBox::Loop(sf::Event &event, sf::RenderWindow &window)
 {
     int size = checkBoxes.size();
     for(int i = 0; i < size; i++)
     {
-        checkBoxes[i]->Check(window);
+        checkBoxes[i]->Check(event, window);
     }
 }
 void CheckBox::Render(sf::RenderWindow *window)

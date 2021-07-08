@@ -9,7 +9,7 @@ int main()
     Slider slider;
     slider.SetWindow(&window);
 
-    CheckBox checkBox(50, 50, 0, 0);
+    CheckBox checkBox;
 
     while(true)
     {
@@ -20,14 +20,12 @@ int main()
         }
 
         MoveIndicators();
-
-        checkBox.Check(window);
+        
+        checkBox.Loop();
 
         window.clear();
 
         //slider.Show();
-
-        checkBox.Render(&window);
 
         window.display();
     }
