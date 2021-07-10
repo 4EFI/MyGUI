@@ -1,5 +1,4 @@
-#include "GUI/MenuController.h"
-#include "GUI/Slider.h"
+#include "GUI/Slider.hpp"
 #include "GUI/CheckBox.hpp"
 
 int main()
@@ -7,9 +6,10 @@ int main()
     sf::RenderWindow window(sf::VideoMode(1000, 700), "Test");
 
     Slider slider;
-    slider.SetWindow(&window);
 
-    CheckBox checkBox(50, 50, 0, 0);
+    //slider.setRectSize({ 350, 3 });
+
+    //CheckBox checkBox(50, 50, 0, 0);
 
     while(true)
     {
@@ -19,15 +19,17 @@ int main()
             if (event.type == sf::Event::Closed) window.close();
         }
 
-        MoveIndicators();
+        ControllSliders();
 
-        checkBox.Check(window);
+        //checkBox.Check(window);
 
         window.clear();
 
-        //slider.Show();
+        slider.draw(window);
 
-        checkBox.Render(&window);
+        printf("%f\n", slider.getValue());
+
+        //checkBox.Render(&window);
 
         window.display();
     }
