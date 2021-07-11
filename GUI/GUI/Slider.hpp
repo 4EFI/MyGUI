@@ -1,11 +1,15 @@
 #include "Button.hpp"
 
+//-----------------------------------------------------------------------------
+
 void ControllSliders();
+
+//-----------------------------------------------------------------------------
 
 class Slider
 {
 private:
-    sf::RenderWindow *window = NULL;
+    sf::RenderWindow *window = 0;
 
     sf::RectangleShape rect;
     sf::RectangleShape rectChanging;
@@ -23,14 +27,17 @@ private:
     void setIndicatorPosition();
 
 public:
-    Slider(float width          = 400, float height          = 5,
-           float widthIndicator = 17,  float heightIndicator = 45,
+    Slider(float width          = 400, float height          = 4,
+           float widthIndicator = 13,  float heightIndicator = 40,
            float minValue       = 0,   float maxValue        = 100);
 
     void moveIndicator();
     void draw         (sf::RenderWindow &window);
 
-    void setRectSize(sf::Vector2f size);
+    void setPosition     (sf::Vector2f position);
+    void setRectSize     (sf::Vector2f size);
+    void setIndicatorSize(sf::Vector2f size);
+    void setScale        (sf::Vector2f scale);
 
     float getValue();
 };
@@ -47,8 +54,10 @@ void Slider::setIndicatorPosition()
 {
     sf::Vector2f indicatorPosition = indicator.getPosition();
     sf::Vector2f rectPosition      = rect.     getPosition();
+    sf::Vector2f scale             = rect.     getScale();
 
-    indicatorPosition.y = rectPosition.y - (heightIndicator - height) / 2;
+    indicatorPosition.y  = rectPosition.y - (heightIndicator - height) / 2 * scale.y;
+    indicatorPosition.x += rectPosition.x;
 
     indicator.setPosition(indicatorPosition);
 }
@@ -99,21 +108,17 @@ void Slider::moveIndicator()
 
     sf::Vector2f cursorPosition    = GetCursorPosition(*window);
     sf::Vector2f indicatorPosition = indicator.getPosition();
+    sf::Vector2f scale             = rect.getScale();
 
-    if(indicator.isPressed(*window) && !buttonIsPressed)
+    if(indicator.isPressed())
     {
-        buttonIsPressed = true;
+        if(!buttonIsPressed)
+        {
+            dist = cursorPosition.x - indicatorPosition.x;
 
-        dist = cursorPosition.x - indicatorPosition.x;
-    }
+            buttonIsPressed = true;
+        }
 
-    if(!sf::Mouse::isButtonPressed(sf::Mouse::Left))
-    {
-        buttonIsPressed = false;
-    }
-
-    if(buttonIsPressed)
-    {
         indicatorPosition.x = cursorPosition.x - dist;
 
         sf::Vector2f rectPosition = rect.getPosition();;
@@ -126,6 +131,10 @@ void Slider::moveIndicator()
         {
             indicatorPosition.x = rectPosition.x + width - widthIndicator;
         }
+    }
+    else
+    {
+        buttonIsPressed = false;
     }
 
     indicator.setPosition(indicatorPosition);
@@ -147,6 +156,16 @@ void Slider::draw(sf::RenderWindow &window)
 
 //-----------------------------------------------------------------------------
 
+void Slider::setPosition(sf::Vector2f position)
+{
+    rect.        setPosition(position);
+    rectChanging.setPosition(position);
+
+    setIndicatorPosition();
+}
+
+//-----------------------------------------------------------------------------
+
 void Slider::setRectSize(sf::Vector2f size)
 {
     sf::Vector2f rectChangingSize = rectChanging.getSize();
@@ -156,11 +175,37 @@ void Slider::setRectSize(sf::Vector2f size)
     width  = size.x;
     height = size.y;
 
-    if(width  < widthIndicator)  width  = widthIndicator;
-    if(height > heightIndicator) height = heightIndicator;
+    if(width / 2 < widthIndicator)  width  = widthIndicator;
+    if(height    > heightIndicator) height = heightIndicator;
 
     rect.        setSize({ width,     height });
     rectChanging.setSize({ width * k, height });
+
+    setIndicatorPosition();
+}
+
+//-----------------------------------------------------------------------------
+
+void Slider::setIndicatorSize(sf::Vector2f size)
+{
+    if(size.x > width / 2)  size.x = width / 2;
+    if(size.y < height) size.y = height;
+
+    indicator.setSize(size);
+
+    widthIndicator  = size.x;
+    heightIndicator = size.y;
+
+    setIndicatorPosition();
+}
+
+//-----------------------------------------------------------------------------
+
+void Slider::setScale(sf::Vector2f scale)
+{
+    rect.        setScale(scale);
+    rectChanging.setScale(scale);
+    indicator   .setScale(scale);
 
     setIndicatorPosition();
 }

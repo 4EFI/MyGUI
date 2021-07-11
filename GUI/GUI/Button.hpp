@@ -24,8 +24,9 @@ protected:
     sf::Text           text;
 
     bool       isLeftButtonPressed = false;
+    bool       isInsideRect        = true;
 
-    sf::RenderWindow *window;
+    sf::RenderWindow *window = 0;
 
     int        buttonIndex;
     static int countButtons;
@@ -38,20 +39,21 @@ public:
     Button();
 
     void draw     (sf::RenderWindow &window);
-    bool isPressed(sf::RenderWindow &window);
-    bool isClicked(sf::RenderWindow &window);
+    bool isPressed();
+    bool isClicked();
 
     void setTexture(const char path[]);
 
-    void setScale    (sf::Vector2f scale);
-    void setSize     (sf::Vector2f size);
-    void setPosition (sf::Vector2f position);
-    void setFillColor(sf::Color    color);
+    void setWindow   (sf::RenderWindow &window);
+    void setScale    (sf::Vector2f      scale);
+    void setSize     (sf::Vector2f      size);
+    void setPosition (sf::Vector2f      position);
+    void setFillColor(sf::Color         color);
 
     int  getIndex();
 
     void setText      (sf::Text *text);
-    void setTextLength(float    length);
+    void setTextLength(float     length);
 
     sf::Vector2f getPosition() {return rectangle.getPosition();}
 };
@@ -146,6 +148,8 @@ Example using
 
 void Button::draw(sf::RenderWindow &window)
 {
+    this->window = &window;
+
     window.draw(rectangle);
 
     window.draw(text);
@@ -173,42 +177,46 @@ Example using
 
 */
 
-bool Button::isPressed(sf::RenderWindow &window)
+bool Button::isPressed()
 {
-    sf::Vector2f cursorPosition = GetCursorPosition(window);
+    if(window == NULL) return 0;
+
+    sf::Vector2f cursorPosition = GetCursorPosition(*window);
     sf::Vector2f buttonPosition = rectangle.getPosition();
     sf::Vector2f scale          = rectangle.getScale();
 
     sf::Vector2u sizeButton = { rectangle.getSize().x * scale.x,
                                 rectangle.getSize().y * scale.y };
 
-    if(GetAsyncKeyState(VK_LBUTTON))
+    if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
     {
+        if(!IsInsideRect(cursorPosition, &rectangle) && !isLeftButtonPressed)
+        {
+            isInsideRect = false;
+        }
+
         isLeftButtonPressed = true;
     }
     else
     {
         isLeftButtonPressed = false;
+        isInsideRect        = true;
+
+        return 0;
     }
 
-    if(IsInsideRect(cursorPosition, &rectangle))
-    {
-        //printf("asdf\n");
+    if(!isInsideRect) return 0;
 
-        if(isLeftButtonPressed)
-        {
-            return 1;
-        }
-    }
-
-    return 0;
+    return 1;
 }
 
 //-----------------------------------------------------------------------------
 
-bool Button::isClicked(sf::RenderWindow &window)
+bool Button::isClicked()
 {
-    if(!isLeftButtonPressed & isPressed(window))
+    if(window == NULL) return 0;
+
+    if(!isLeftButtonPressed & isPressed())
     {
         return 1;
     }
@@ -219,6 +227,13 @@ bool Button::isClicked(sf::RenderWindow &window)
     }
 
     return 0;
+}
+
+//-----------------------------------------------------------------------------
+
+void Button::setWindow(sf::RenderWindow &window)
+{
+    this->window = &window;
 }
 
 //-----------------------------------------------------------------------------

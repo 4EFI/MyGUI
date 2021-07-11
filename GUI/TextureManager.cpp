@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <windows.h>
-#include "MenuController.h"
+#include "GUI/RectangleSelection.hpp"
 
 const float MinScale = 0.15;
 
@@ -50,12 +50,12 @@ int main()
     sf::Text text("Click!", font, 40);
 
     Button button;
-    button.SetScale  ({0.7, 0.7});
-    button.SetTexture(DEFAULT_BUTTON);
-    button.SetPosition({100, 20});
+    button.setScale  ({0.7, 0.7});
+    button.setTexture(DEFAULT_BUTTON);
+    button.setPosition({100, 20});
 
-    button.SetText(&text);
-    button.SetTextLength(100);
+    button.setText(&text);
+    button.setTextLength(100);
 
     while(true)
     {
@@ -98,15 +98,15 @@ int main()
         window.draw(spriteImg);
 
         ShowMenuPanel(window);
-        button.Show  (window);
+        button.draw  (window);
 
-        if(button.IsClicked(window) && canClick)
+        if(button.isClicked(window) && canClick)
         {
             printf("Click11!!!\n");
             canClick = false;
         }
 
-        if(rectangle.IsClicked(window) && canClick)
+        if(rectangle.isClicked(window) && canClick)
         {
             printf("Click!!!\n");
             canClick = false;

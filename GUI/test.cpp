@@ -7,9 +7,21 @@ int main()
 
     Slider slider;
 
-    //slider.setRectSize({ 350, 3 });
+    CheckBox checkBox(50, 50, 0, 0);
 
-    //CheckBox checkBox(50, 50, 0, 0);
+    slider.setPosition({100, 100});
+    //slider.setScale   ({2, 2});
+
+    Button button;
+
+    button.setTexture(DEFAULT_BUTTON);
+
+    sf::Font font;
+    font.loadFromFile("Fonts\\ariblk.ttf");
+
+    sf::Text text("Settings", font, 25);
+
+    button.setText(&text);
 
     while(true)
     {
@@ -20,16 +32,20 @@ int main()
         }
 
         ControllSliders();
-
-        //checkBox.Check(window);
+        ControllCheckBoxes();
 
         window.clear();
 
-        slider.draw(window);
+        //if(button.isPressed())
+        //{
+            //slider.draw(window);
+        //}
 
-        printf("%f\n", slider.getValue());
+        //button.draw(window);
 
-        //checkBox.Render(&window);
+        //printf("%f\n", slider.getValue());
+
+        checkBox.draw(window);
 
         window.display();
     }
