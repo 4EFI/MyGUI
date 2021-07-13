@@ -29,7 +29,7 @@ private:
 public:
     Slider(float width          = 400, float height          = 4,
            float widthIndicator = 13,  float heightIndicator = 40,
-           float minValue       = 0,   float maxValue        = 100);
+           float minValue       = 35,   float maxValue        = 100);
 
     void moveIndicator();
     void draw         (sf::RenderWindow &window);
@@ -52,12 +52,13 @@ static std::vector<Slider*> sliders;
 
 void Slider::setIndicatorPosition()
 {
-    sf::Vector2f indicatorPosition = indicator.getPosition();
+    sf::Vector2f indicatorPosition = indicator.getPosition() ;
     sf::Vector2f rectPosition      = rect.     getPosition();
     sf::Vector2f scale             = rect.     getScale();
 
     indicatorPosition.y  = rectPosition.y - (heightIndicator - height) / 2 * scale.y;
     indicatorPosition.x += rectPosition.x;
+    indicatorPosition.x /= scale.x;
 
     indicator.setPosition(indicatorPosition);
 }
@@ -218,9 +219,9 @@ float Slider::getValue()
     sf::Vector2f indicatorPosition = indicator.getPosition();
     sf::Vector2f rectPosition      = rect.     getPosition();
 
-    float value = (indicatorPosition.x - rectPosition.x) / (width - widthIndicator);
+    float value = (indicatorPosition.x - rectPosition.x) / (width - widthIndicator) / scale.x;
 
-    return (value * (maxValue - minValue) + minValue) / scale.x;
+    return value * (maxValue - minValue) + minValue;
 }
 
 //}     End of Public Functions

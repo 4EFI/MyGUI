@@ -7,14 +7,19 @@ int main()
 
     Slider slider;
 
-    CheckBox checkBox(50, 50, 0, 0);
+    CheckBox checkBox;
+    checkBox.setCheckBoxSize({10, 10});
+
+    checkBox.setPosition({100, 100});
+
+    checkBox.setScale({2, 2});
 
     slider.setPosition({100, 100});
     slider.setScale   ({2, 4});
 
     Button button;
 
-    button.setTexture(DEFAULT_BUTTON);
+    //button.setTexture(DEFAULT_BUTTON);
 
     sf::Font font;
     font.loadFromFile("Fonts\\ariblk.ttf");
@@ -45,7 +50,7 @@ int main()
 
         printf("%f\n", slider.getValue());
 
-        checkBox.draw(window);
+        //checkBox.draw(window);
 
         window.display();
     }

@@ -40,7 +40,6 @@ public:
     bool isPressed();
     bool isClicked();
 
-    void setTexture   (const char        path[]);
     void setTexture   (sf::Texture      &texture);
     void setWindow    (sf::RenderWindow &window);
     void setScale     (sf::Vector2f      scale);
@@ -211,7 +210,7 @@ bool Button::isClicked()
         return 1;
     }
 
-    if(!GetAsyncKeyState(VK_LBUTTON))
+    if(!sf::Mouse::isButtonPressed(sf::Mouse::Left))
     {
         isLeftButtonPressed = false;
     }
@@ -224,18 +223,6 @@ bool Button::isClicked()
 void Button::setWindow(sf::RenderWindow &window)
 {
     this->window = &window;
-}
-
-//-----------------------------------------------------------------------------
-
-void Button::setTexture(const char path[])
-{
-    buttonTexture.loadFromFile(path);
-
-    sf::Vector2f sizeTexture = (sf::Vector2f)buttonTexture.getSize();
-
-    rectangle.setSize   (sizeTexture);
-    rectangle.setTexture(&buttonTexture);
 }
 
 //-----------------------------------------------------------------------------
