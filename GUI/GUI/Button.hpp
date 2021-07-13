@@ -28,9 +28,7 @@ protected:
 
     sf::RenderWindow *window = 0;
 
-    int        buttonIndex;
-    static int countButtons;
-    float      maxLengthText = FLT_MAX;
+    float maxLengthText = FLT_MAX;
 
     void setTextPosition();
     void setTextHeight();
@@ -42,28 +40,23 @@ public:
     bool isPressed();
     bool isClicked();
 
-    void setTexture(const char path[]);
+    void setTexture   (const char        path[]);
+    void setTexture   (sf::Texture      &texture);
+    void setWindow    (sf::RenderWindow &window);
+    void setScale     (sf::Vector2f      scale);
+    void setSize      (sf::Vector2f      size);
+    void setPosition  (sf::Vector2f      position);
+    void setFillColor (sf::Color         color);
+    void setText      (sf::Text         &text);
+    void setTextLength(float             length);
 
-    void setWindow   (sf::RenderWindow &window);
-    void setScale    (sf::Vector2f      scale);
-    void setSize     (sf::Vector2f      size);
-    void setPosition (sf::Vector2f      position);
-    void setFillColor(sf::Color         color);
-
-    int  getIndex();
-
-    void setText      (sf::Text *text);
-    void setTextLength(float     length);
-
-    sf::Vector2f getPosition() {return rectangle.getPosition();}
+    sf::Vector2f getPosition();
+    sf::Vector2f getSize    ();
+    sf::Vector2f getScale   ();
 };
 
 //-----------------------------------------------------------------------------
 //{     Button realization
-//-----------------------------------------------------------------------------
-
-int Button::countButtons = 0;
-
 //-----------------------------------------------------------------------------
 
 /*!
@@ -73,9 +66,6 @@ int Button::countButtons = 0;
 Button::Button()
 {
     rectangle.setSize({200, 100});
-
-    countButtons++;
-    buttonIndex = countButtons;
 }
 
 //-----------------------------------------------------------------------------
@@ -250,6 +240,15 @@ void Button::setTexture(const char path[])
 
 //-----------------------------------------------------------------------------
 
+void Button::setTexture(sf::Texture &texture)
+{
+    buttonTexture = texture;
+
+    rectangle.setTexture(&buttonTexture);
+}
+
+//-----------------------------------------------------------------------------
+
 void Button::setScale(sf::Vector2f scale)
 {
     rectangle.setScale(scale);
@@ -280,16 +279,9 @@ void Button::setFillColor(sf::Color color)
 
 //-----------------------------------------------------------------------------
 
-int Button::getIndex()
+void Button::setText(sf::Text &text)
 {
-    return buttonIndex;
-}
-
-//-----------------------------------------------------------------------------
-
-void Button::setText(sf::Text *text)
-{
-    this->text = *text;
+    this->text = text;
 
     this->text.setScale(rectangle.getScale());
 
@@ -345,6 +337,27 @@ void Button::setTextLength(float length)
 
     text.setString(newTextStr);
     setTextPosition();
+}
+
+//-----------------------------------------------------------------------------
+
+sf::Vector2f Button::getPosition()
+{
+    return rectangle.getPosition();
+}
+
+//-----------------------------------------------------------------------------
+
+sf::Vector2f Button::getSize()
+{
+    return rectangle.getSize();
+}
+
+//-----------------------------------------------------------------------------
+
+sf::Vector2f Button::getScale()
+{
+    return rectangle.getScale();
 }
 
 /*! @} */

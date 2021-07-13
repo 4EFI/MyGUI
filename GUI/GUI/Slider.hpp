@@ -106,9 +106,9 @@ void Slider::moveIndicator()
     static bool  buttonIsPressed = false;
     static float dist = 0;
 
+    sf::Vector2f scale             = rect.getScale();
     sf::Vector2f cursorPosition    = GetCursorPosition(*window);
     sf::Vector2f indicatorPosition = indicator.getPosition();
-    sf::Vector2f scale             = rect.getScale();
 
     if(indicator.isPressed())
     {
@@ -127,9 +127,9 @@ void Slider::moveIndicator()
         {
             indicatorPosition.x = rectPosition.x;
         }
-        else if(indicatorPosition.x > rectPosition.x + width - widthIndicator)
+        else if(indicatorPosition.x > rectPosition.x + (width - widthIndicator) * scale.x)
         {
-            indicatorPosition.x = rectPosition.x + width - widthIndicator;
+            indicatorPosition.x = rectPosition.x + (width - widthIndicator) * scale.x;
         }
     }
     else
@@ -139,7 +139,7 @@ void Slider::moveIndicator()
 
     indicator.setPosition(indicatorPosition);
 
-    rectChanging.setSize({ indicatorPosition.x - rect.getPosition().x, height });
+    rectChanging.setSize({ (indicatorPosition.x - rect.getPosition().x) / scale.x, height });
 }
 
 //-----------------------------------------------------------------------------
@@ -189,7 +189,7 @@ void Slider::setRectSize(sf::Vector2f size)
 void Slider::setIndicatorSize(sf::Vector2f size)
 {
     if(size.x > width / 2)  size.x = width / 2;
-    if(size.y < height) size.y = height;
+    if(size.y < height)     size.y = height;
 
     indicator.setSize(size);
 
@@ -214,12 +214,13 @@ void Slider::setScale(sf::Vector2f scale)
 
 float Slider::getValue()
 {
+    sf::Vector2f scale             = rect.     getScale   ();
     sf::Vector2f indicatorPosition = indicator.getPosition();
     sf::Vector2f rectPosition      = rect.     getPosition();
 
-    float value = (indicatorPosition - rectPosition).x / (width - widthIndicator);
+    float value = (indicatorPosition.x - rectPosition.x) / (width - widthIndicator);
 
-    return value * (maxValue - minValue) + minValue;
+    return (value * (maxValue - minValue) + minValue) / scale.x;
 }
 
 //}     End of Public Functions

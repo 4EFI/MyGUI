@@ -10,7 +10,7 @@ int main()
     CheckBox checkBox(50, 50, 0, 0);
 
     slider.setPosition({100, 100});
-    //slider.setScale   ({2, 2});
+    slider.setScale   ({2, 4});
 
     Button button;
 
@@ -21,7 +21,7 @@ int main()
 
     sf::Text text("Settings", font, 25);
 
-    button.setText(&text);
+    button.setText(text);
 
     while(true)
     {
@@ -38,12 +38,12 @@ int main()
 
         //if(button.isPressed())
         //{
-            //slider.draw(window);
+            slider.draw(window);
         //}
 
         //button.draw(window);
 
-        //printf("%f\n", slider.getValue());
+        printf("%f\n", slider.getValue());
 
         checkBox.draw(window);
 
