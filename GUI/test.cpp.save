@@ -25,7 +25,7 @@ int main()
     sf::Text text("Settings", font, 25);
     text.setColor(sf::Color::Black);
 
-    //button.setVisible(0.3);
+    button.setVisible(0.3);
 
     button.setTextString("123");
 
@@ -55,13 +55,13 @@ int main()
 
         //slider.draw(window);
 
-        button.draw(window);
+        //button.draw(window);
 
         //printf("%f\n", slider.getValue());
 
         //checkBox.draw(window);
 
-        buttonsList.draw(window);
+        //buttonsList.draw(window);
 
         window.display();
     }

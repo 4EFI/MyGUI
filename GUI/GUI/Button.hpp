@@ -1,7 +1,7 @@
 #ifndef BUTTON
 #define BUTTON
 
-#include <SFML/Graphics.hpp>
+#include "SFML/Graphics.hpp"
 #include <stdio.h>
 #include <string.h>
 #include <windows.h>
@@ -21,10 +21,15 @@ protected:
     sf::RectangleShape rectangle;
     sf::Texture        buttonTexture;
 
-    sf::Text           text;
+    sf::RectangleShape rectChoose;
 
-    bool       isLeftButtonPressed = false;
-    bool       isInsideRect        = true;
+    sf ::Font   fontText;
+    std::string textStr;
+    sf ::Text   startText;
+    sf ::Text   text;
+
+    bool isLeftButtonPressed = false;
+    bool isInsideRect        = true;
 
     sf::RenderWindow *window = 0;
 
@@ -40,14 +45,19 @@ public:
     bool isPressed();
     bool isClicked();
 
-    void setTexture   (sf::Texture      &texture);
-    void setWindow    (sf::RenderWindow &window);
-    void setScale     (sf::Vector2f      scale);
-    void setSize      (sf::Vector2f      size);
-    void setPosition  (sf::Vector2f      position);
-    void setFillColor (sf::Color         color);
-    void setText      (sf::Text         &text);
-    void setTextLength(float             length);
+    void isCursorInsideBox();
+
+    void move          (sf::Vector2f      position);
+    void setTexture    (sf::Texture       texture);
+    void setTextureRect(sf::IntRect       rect);
+    void setWindow     (sf::RenderWindow &window);
+    void setScale      (sf::Vector2f      scale);
+    void setSize       (sf::Vector2f      size);
+    void setPosition   (sf::Vector2f      position);
+    void setFillColor  (sf::Color         color);
+    void setTextString (std::string       str);
+    void setTextLength (float             length);
+    void setVisible    (float             visible);
 
     sf::Vector2f getPosition();
     sf::Vector2f getSize    ();
@@ -65,6 +75,11 @@ public:
 Button::Button()
 {
     rectangle.setSize({200, 100});
+
+    fontText.loadFromFile("Fonts\\ariblk.ttf");
+    text.setFont(fontText);
+    text.setCharacterSize(25);
+    text.setFillColor(sf::Color::Black);
 }
 
 //-----------------------------------------------------------------------------
@@ -78,6 +93,7 @@ void Button::setTextPosition()
     sizeRect = { sizeRect.x * scaleRect.x, sizeRect.y * scaleRect.y };
 
     sf::FloatRect textBounds = text.getLocalBounds();
+
     textBounds.width  *= scaleRect.x;
     textBounds.height *= scaleRect.y;
     textBounds.left   *= scaleRect.x;
@@ -142,6 +158,8 @@ void Button::draw(sf::RenderWindow &window)
     window.draw(rectangle);
 
     window.draw(text);
+
+    isCursorInsideBox();
 }
 
 //-----------------------------------------------------------------------------
@@ -220,6 +238,31 @@ bool Button::isClicked()
 
 //-----------------------------------------------------------------------------
 
+void Button::isCursorInsideBox()
+{
+    sf::Color color({0, 0, 0, 20});
+
+    rectChoose.setFillColor(color);
+    rectChoose.setSize     (rectangle.getSize());
+    rectChoose.setPosition (rectangle.getPosition());
+
+    sf::Vector2f cursorPosition = GetCursorPosition(*window);
+
+    if(IsInsideRect(cursorPosition, &rectangle))
+    {
+        window->draw(rectChoose);
+    }
+}
+
+//-----------------------------------------------------------------------------
+
+void Button::move(sf::Vector2f position)
+{
+    setPosition(getPosition() + position);
+}
+
+//-----------------------------------------------------------------------------
+
 void Button::setWindow(sf::RenderWindow &window)
 {
     this->window = &window;
@@ -227,11 +270,18 @@ void Button::setWindow(sf::RenderWindow &window)
 
 //-----------------------------------------------------------------------------
 
-void Button::setTexture(sf::Texture &texture)
+void Button::setTexture(sf::Texture texture)
 {
     buttonTexture = texture;
 
     rectangle.setTexture(&buttonTexture);
+}
+
+//-----------------------------------------------------------------------------
+
+void Button::setTextureRect(sf::IntRect rect)
+{
+    rectangle.setTextureRect(rect);
 }
 
 //-----------------------------------------------------------------------------
@@ -266,11 +316,18 @@ void Button::setFillColor(sf::Color color)
 
 //-----------------------------------------------------------------------------
 
-void Button::setText(sf::Text &text)
+void Button::setTextString(std::string str)
 {
-    this->text = text;
+    textStr = str;
 
-    this->text.setScale(rectangle.getScale());
+    text.setString(str);
+    text.setScale (rectangle.getScale());
+
+    fontText.loadFromFile("Fonts\\ariblk.ttf");
+    text.setFont(fontText);
+    text.setCharacterSize(25);
+
+    //text = startText;
 
     setTextHeight  ();
     setTextLength  (maxLengthText);
@@ -282,6 +339,8 @@ void Button::setText(sf::Text &text)
 void Button::setTextLength(float length)
 {
     std::string textStr = text.getString();
+
+    printf("%c\n", textStr[1]);
 
     sf::FloatRect boundsText = text.getLocalBounds();
     sf::Vector2f  scaleRect  = rectangle.getScale();
@@ -324,6 +383,22 @@ void Button::setTextLength(float length)
 
     text.setString(newTextStr);
     setTextPosition();
+}
+
+//-----------------------------------------------------------------------------
+
+void Button::setVisible(float visible)
+{
+    if(visible > 1) visible = 1;
+    if(visible < 0) visible = 0;
+
+    sf::Color colorRect = rectangle.getFillColor();
+    colorRect.a = 255 * visible;
+    rectangle.setFillColor(colorRect);
+
+    sf::Color colorText = text.getColor();
+    colorText.a         = 255 * visible;
+    text.setColor(colorText);
 }
 
 //-----------------------------------------------------------------------------

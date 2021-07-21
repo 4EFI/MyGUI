@@ -1,7 +1,7 @@
 #ifndef CHECKBOX
 #define CHECKBOX
 
-#include <SFML/Graphics.hpp>
+#include "SFML/Graphics.hpp"
 #include "Button.hpp"
 #include <vector>
 
@@ -182,7 +182,7 @@ void CheckBox::setFlagRect(sf::IntRect rect)
 
 void CheckBox::setCheckBoxRect(sf::IntRect rect)
 {
-    //checkbox.setTextureRect(rect);
+    checkbox.setTextureRect(rect);
 }
 
 //-----------------------------------------------------------------------------
