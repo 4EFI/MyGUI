@@ -35,9 +35,9 @@ public:
 	void setScale          (sf::Vector2f   scale);
 	void setFlagTexture    (sf::Texture   &texture);
 	void setCheckBoxTexture(sf::Texture   &texture);
-    void setFlagRect       (sf::IntRect  rect);
-    void setCheckBoxRect   (sf::IntRect  rect);
-    void setState          (bool         state);
+    void setFlagRect       (sf::IntRect    rect);
+    void setCheckBoxRect   (sf::IntRect    rect);
+    void setState          (bool           state);
 
     bool getState();
 };

@@ -15,6 +15,8 @@ sf::Vector2f GetCursorPosition(sf::RenderWindow &window)
 
     cursorPosition = (sf::Vector2f)sf::Mouse::getPosition(window);
     cursorPosition = window.mapPixelToCoords((sf::Vector2i)cursorPosition);
+
+    return cursorPosition;
 }
 
 //-----------------------------------------------------------------------------

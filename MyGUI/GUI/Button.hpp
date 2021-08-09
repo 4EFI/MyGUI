@@ -13,6 +13,16 @@
 
 #define DEFAULT_BUTTON "Textures\\DefaultButton.png"
 
+enum PositionState
+{
+    left,
+    middle,
+    right,
+    down,
+    top,
+    no_changes
+};
+
 //-----------------------------------------------------------------------------
 
 class Button
@@ -23,10 +33,8 @@ protected:
 
     sf::RectangleShape rectChoose;
 
-    sf ::Font   fontText;
-    std::string textStr;
-    sf ::Text   startText;
-    sf ::Text   text;
+    sf ::Text startText;
+    sf ::Text text;
 
     bool isLeftButtonPressed = false;
     bool isInsideRect        = true;
@@ -35,7 +43,6 @@ protected:
 
     float maxLengthText = FLT_MAX;
 
-    void setTextPosition();
     void setTextHeight();
 
 public:
@@ -47,17 +54,20 @@ public:
 
     void isCursorInsideBox();
 
-    void move          (sf::Vector2f      position);
-    void setTexture    (sf::Texture       texture);
-    void setTextureRect(sf::IntRect       rect);
-    void setWindow     (sf::RenderWindow &window);
-    void setScale      (sf::Vector2f      scale);
-    void setSize       (sf::Vector2f      size);
-    void setPosition   (sf::Vector2f      position);
-    void setFillColor  (sf::Color         color);
-    void setTextString (std::string       str);
-    void setTextLength (float             length);
-    void setVisible    (float             visible);
+    void move           (sf ::Vector2f      position);
+    void setTexture     (sf ::Texture       texture);
+    void setTextureRect (sf ::IntRect       rect);
+    void setWindow      (sf ::RenderWindow &window);
+    void setScale       (sf ::Vector2f      scale);
+    void setSize        (sf ::Vector2f      size);
+    void setPosition    (sf ::Vector2f      position);
+    void setFillColor   (sf ::Color         color);
+    void setText        (sf ::Text          text);
+    void setTextString  (std::string        str);
+    void setTextPosition(sf::Vector2f       localPosition);
+    void setTextPosition(PositionState      posX, PositionState posY);
+    void setTextLength  (float              length);
+    void setVisible     (float              visible);
 
     sf::Vector2f getPosition();
     sf::Vector2f getSize    ();
@@ -75,32 +85,6 @@ public:
 Button::Button()
 {
     rectangle.setSize({200, 100});
-
-    fontText.loadFromFile("Fonts\\ariblk.ttf");
-    text.setFont(fontText);
-    text.setCharacterSize(25);
-    text.setFillColor(sf::Color::Black);
-}
-
-//-----------------------------------------------------------------------------
-
-void Button::setTextPosition()
-{
-    sf::Vector2f positionRect = rectangle.getPosition();
-    sf::Vector2f scaleRect    = rectangle.getScale();
-    sf::Vector2f sizeRect     = rectangle.getSize();
-
-    sizeRect = { sizeRect.x * scaleRect.x, sizeRect.y * scaleRect.y };
-
-    sf::FloatRect textBounds = text.getLocalBounds();
-
-    textBounds.width  *= scaleRect.x;
-    textBounds.height *= scaleRect.y;
-    textBounds.left   *= scaleRect.x;
-    textBounds.top    *= scaleRect.y;
-
-    text.setPosition((sizeRect.x - textBounds.width)  / 2 + positionRect.x - textBounds.left,
-                     (sizeRect.y - textBounds.height) / 2 + positionRect.y - textBounds.top);
 }
 
 //-----------------------------------------------------------------------------
@@ -291,7 +275,7 @@ void Button::setScale(sf::Vector2f scale)
     rectangle.setScale(scale);
 
     text.setScale(scale);
-    setTextPosition();
+    //setTextPosition();
 }
 
 //-----------------------------------------------------------------------------
@@ -306,7 +290,7 @@ void Button::setSize(sf::Vector2f size)
 void Button::setPosition(sf::Vector2f position)
 {
     rectangle.setPosition(position);
-    setTextPosition();
+    //setTextPosition();
 }
 
 void Button::setFillColor(sf::Color color)
@@ -316,31 +300,110 @@ void Button::setFillColor(sf::Color color)
 
 //-----------------------------------------------------------------------------
 
-void Button::setTextString(std::string str)
+void Button::setText(sf::Text text)
 {
-    textStr = str;
+    startText = text;
 
-    text.setString(str);
-    text.setScale (rectangle.getScale());
-
-    fontText.loadFromFile("Fonts\\ariblk.ttf");
-    text.setFont(fontText);
-    text.setCharacterSize(25);
-
-    //text = startText;
+    this->text = text;
 
     setTextHeight  ();
     setTextLength  (maxLengthText);
-    setTextPosition();
+    //setTextPosition();
+}
+
+//-----------------------------------------------------------------------------
+
+void Button::setTextString(std::string str)
+{
+    text.setString(str);
+    text.setScale (rectangle.getScale());
+
+    setTextHeight  ();
+    setTextLength  (maxLengthText);
+    //setTextPosition();
+}
+
+void Button::setTextPosition(sf::Vector2f localPosition)
+{
+    sf::Vector2f positionRect = rectangle.getPosition();
+    sf::Vector2f scaleRect    = rectangle.getScale();
+    sf::Vector2f sizeRect     = rectangle.getSize();
+
+    sizeRect = { sizeRect.x * scaleRect.x, sizeRect.y * scaleRect.y };
+
+    sf::FloatRect textBounds = text.getLocalBounds();
+
+    textBounds.width  *= scaleRect.x;
+    textBounds.height *= scaleRect.y;
+    textBounds.left   *= scaleRect.x;
+    textBounds.top    *= scaleRect.y;
+
+    float maxLengthText = sizeRect.x - localPosition.x;
+    if(textBounds.width > maxLengthText)
+    {
+        setTextLength(maxLengthText);
+    }
+
+    text.setPosition(localPosition);
+}
+
+//-----------------------------------------------------------------------------
+
+void Button::setTextPosition(PositionState posX, PositionState posY)
+{
+    sf::Vector2f positionRect = rectangle.getPosition();
+    sf::Vector2f scaleRect    = rectangle.getScale();
+    sf::Vector2f sizeRect     = rectangle.getSize();
+
+    sizeRect = { sizeRect.x * scaleRect.x, sizeRect.y * scaleRect.y };
+
+    sf::FloatRect textBounds = text.getLocalBounds();
+
+    textBounds.width  *= scaleRect.x;
+    textBounds.height *= scaleRect.y;
+    textBounds.left   *= scaleRect.x;
+    textBounds.top    *= scaleRect.y;
+
+    sf::Vector2f positionText = text.getPosition();
+
+    switch(posX)
+    {
+    case left:
+        positionText.x = positionRect.x;
+        break;
+
+    case middle:
+        positionText.x = (sizeRect.x - textBounds.width) / 2 + positionRect.x - textBounds.left;
+        break;
+
+    case right:
+        positionText.x = sizeRect.x - textBounds.width - textBounds.left;
+        break;
+    }
+
+    switch(posY)
+    {
+    case top:
+        positionText.y = positionRect.y;
+        break;
+
+    case middle:
+        positionText.y = (sizeRect.y - textBounds.height) / 2 + positionRect.y - textBounds.top;
+        break;
+
+    case down:
+        positionText.y = sizeRect.y - textBounds.height - textBounds.top;
+        break;
+    }
+
+    text.setPosition(positionText);
 }
 
 //-----------------------------------------------------------------------------
 
 void Button::setTextLength(float length)
 {
-    std::string textStr = text.getString();
-
-    printf("%c\n", textStr[1]);
+    std::string textStr = startText.getString();
 
     sf::FloatRect boundsText = text.getLocalBounds();
     sf::Vector2f  scaleRect  = rectangle.getScale();
@@ -382,7 +445,7 @@ void Button::setTextLength(float length)
     }
 
     text.setString(newTextStr);
-    setTextPosition();
+    //setTextPosition();
 }
 
 //-----------------------------------------------------------------------------

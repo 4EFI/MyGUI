@@ -42,9 +42,9 @@ public:
     void setIndicatorSize    (sf::Vector2f size);
     void setRectColor        (sf::Color    color);
     void setChangingRectColor(sf::Color    color);
-    void setIndicatorColor   (sf::Color    color);
+    void setIndicatorColor   (sf::Color    color, bool rectChangingColor = 1);
     void setScale            (sf::Vector2f scale);
-    void setInterval         (float        minValue, float maxValue);
+    void setRange            (float        minValue, float maxValue);
     void setValue            (float        value);
 
     float        getValue();
@@ -98,9 +98,6 @@ Slider::Slider(float width,          float height,
     indicator.setSize({ widthIndicator, heightIndicator });
 
     rectChanging.setSize({0, height});
-
-    rectChanging.setFillColor(sf::Color::Red);
-    indicator.   setFillColor(sf::Color::Red);
 
     sf::Vector2f rectPosition = { 0, (heightIndicator - height) / 2 };
 
@@ -213,9 +210,14 @@ void Slider::setChangingRectColor(sf::Color color)
 
 //-----------------------------------------------------------------------------
 
-void Slider::setIndicatorColor(sf::Color color)
+void Slider::setIndicatorColor(sf::Color color, bool rectChangingColor)
 {
-    indicator.setFillColor(color);
+    indicator.   setFillColor(color);
+
+    if(rectChangingColor)
+    {
+        rectChanging.setFillColor(color);
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -246,7 +248,7 @@ void Slider::setScale(sf::Vector2f scale)
 
 //-----------------------------------------------------------------------------
 
-void Slider::setInterval(float minValue, float maxValue)
+void Slider::setRange(float minValue, float maxValue)
 {
     this->minValue = minValue;
     this->maxValue = maxValue;

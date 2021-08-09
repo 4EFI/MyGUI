@@ -170,7 +170,12 @@ void ButtonsList::setDefault(int choise)
     mainButton.setTexture(mainTexture);
     mainButton.setSize   ({322.5, 77.5});
 
-    //mainButton.setTextString("123");
+    sf::Font font;
+    font.loadFromFile("Fonts\\ariblk.ttf");
+
+    sf::Text text("Test", font, 35);
+
+    mainButton.setText(text);
 
     for(int i = 0; i < countButtons; i++)
     {
@@ -180,7 +185,7 @@ void ButtonsList::setDefault(int choise)
         buttons[i].setTexture(texture);
         buttons[i].setSize   ({322.5, 77.5});
 
-        buttons[i].setTextString("test");
+        buttons[i].setText(text);
     }
 
     setOpenTrianglePosition();
