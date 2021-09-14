@@ -54,7 +54,7 @@ public:
     bool isPressed();
     bool isClicked();
 
-    bool isCursorInsideBox();
+    void isCursorInsideBox();
 
     void move           (sf ::Vector2f      position);
     void setTexture     (sf ::Texture       texture);
@@ -94,8 +94,6 @@ Button::Button()
 
 void Button::setTextHeight()
 {
-    if(text.getString() == "") return;
-
     sf::Vector2f positionRect = rectangle.getPosition();
     sf::Vector2f scaleRect    = rectangle.getScale();
     sf::Vector2f sizeRect     = rectangle.getSize();
@@ -227,7 +225,7 @@ bool Button::isClicked()
 
 //-----------------------------------------------------------------------------
 
-bool Button::isCursorInsideBox()
+void Button::isCursorInsideBox()
 {
     sf::Color color({0, 0, 0, 20});
 
@@ -240,11 +238,7 @@ bool Button::isCursorInsideBox()
     if(IsInsideRect(cursorPosition, &rectangle))
     {
         window->draw(rectChoose);
-
-        return 1;
     }
-
-    return 0;
 }
 
 //-----------------------------------------------------------------------------
@@ -283,8 +277,8 @@ void Button::setScale(sf::Vector2f scale)
 {
     rectangle.setScale(scale);
 
-    text.setScale   (scale);
-    text.setPosition(getPosition() + localTextPosition);
+    text.setScale(scale);
+    //setTextPosition();
 }
 
 //-----------------------------------------------------------------------------
@@ -292,14 +286,6 @@ void Button::setScale(sf::Vector2f scale)
 void Button::setSize(sf::Vector2f size)
 {
     rectangle.setSize(size);
-
-    if(text.getString() != "")
-    {
-        setTextHeight();
-        setTextLength(maxLengthText);
-
-        this->text.setPosition(getPosition() + localTextPosition);
-    }
 }
 
 //-----------------------------------------------------------------------------
@@ -307,11 +293,7 @@ void Button::setSize(sf::Vector2f size)
 void Button::setPosition(sf::Vector2f position)
 {
     rectangle.setPosition(position);
-
-    if(text.getString() != "")
-    {
-        text.setPosition(position + localTextPosition);
-    }
+    setTextPosition(position + );
 }
 
 void Button::setFillColor(sf::Color color)
@@ -327,11 +309,9 @@ void Button::setText(sf::Text text)
 
     this->text = text;
 
-    setTextHeight();
-    setTextLength(maxLengthText);
-
-    this->text.setPosition(getPosition() + localTextPosition);
-    this->text.setScale(getScale());
+    setTextHeight  ();
+    setTextLength  (maxLengthText);
+    //setTextPosition();
 }
 
 //-----------------------------------------------------------------------------
@@ -341,15 +321,13 @@ void Button::setTextString(std::string str)
     text.setString(str);
     text.setScale (rectangle.getScale());
 
-    setTextHeight   ();
-    setTextLength   (maxLengthText);
-    text.setPosition(getPosition() + localTextPosition);
+    setTextHeight  ();
+    setTextLength  (maxLengthText);
+    //setTextPosition();
 }
 
 void Button::setTextPosition(sf::Vector2f localPosition)
 {
-    if(text.getString() == "") return;
-
     sf::Vector2f positionRect = rectangle.getPosition();
     sf::Vector2f scaleRect    = rectangle.getScale();
     sf::Vector2f sizeRect     = rectangle.getSize();
@@ -369,17 +347,15 @@ void Button::setTextPosition(sf::Vector2f localPosition)
         setTextLength(maxLengthText);
     }
 
-    text.setPosition(getPosition() + localPosition);
-
-    localTextPosition = localPosition;
+    text.setPosition(localPosition);
+    
+    localTextPosition = localPo
 }
 
 //-----------------------------------------------------------------------------
 
 void Button::setTextPosition(PositionState posX, PositionState posY)
 {
-    if(text.getString() == "") return;
-
     sf::Vector2f positionRect = rectangle.getPosition();
     sf::Vector2f scaleRect    = rectangle.getScale();
     sf::Vector2f sizeRect     = rectangle.getSize();
@@ -393,45 +369,45 @@ void Button::setTextPosition(PositionState posX, PositionState posY)
     textBounds.left   *= scaleRect.x;
     textBounds.top    *= scaleRect.y;
 
+    sf::Vector2f positionText = text.getPosition();
+
     switch(posX)
     {
     case left:
-        localTextPosition.x = 0;
+        positionText.x = positionRect.x;
         break;
 
     case middle:
-        localTextPosition.x = (sizeRect.x - textBounds.width) / 2 - textBounds.left;
+        positionText.x = (sizeRect.x - textBounds.width) / 2 + positionRect.x - textBounds.left;
         break;
 
     case right:
-        localTextPosition.x = sizeRect.x - textBounds.width - textBounds.left;
+        positionText.x = sizeRect.x - textBounds.width - textBounds.left;
         break;
     }
 
     switch(posY)
     {
     case top:
-        localTextPosition.y = 0;
+        positionText.y = positionRect.y;
         break;
 
     case middle:
-        localTextPosition.y = (sizeRect.y - textBounds.height) / 2 - textBounds.top;
+        positionText.y = (sizeRect.y - textBounds.height) / 2 + positionRect.y - textBounds.top;
         break;
 
     case down:
-        localTextPosition.y = sizeRect.y - textBounds.height - textBounds.top;
+        positionText.y = sizeRect.y - textBounds.height - textBounds.top;
         break;
     }
 
-    text.setPosition(getPosition() + localTextPosition);
+    text.setPosition(positionText);
 }
 
 //-----------------------------------------------------------------------------
 
 void Button::setTextLength(float length)
 {
-    if(text.getString() == "") return;
-
     std::string textStr = startText.getString();
 
     sf::FloatRect boundsText = text.getLocalBounds();
@@ -474,6 +450,7 @@ void Button::setTextLength(float length)
     }
 
     text.setString(newTextStr);
+    //setTextPosition();
 }
 
 //-----------------------------------------------------------------------------

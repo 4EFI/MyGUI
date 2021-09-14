@@ -9,7 +9,7 @@ int main()
 
     button.setSize    ({200, 80});
     button.setPosition({100, 100});
-    button.setScale   ({2, 2});
+    button.setScale   ({4, 1});
 
     sf::Font font;
     font.loadFromFile("..\\Fonts\\ariblk.ttf");
@@ -35,7 +35,7 @@ int main()
             printf("click\n");
         }
 
-        window.clear(sf::Color::Blue);
+        window.clear();
 
         button.draw(window);
 
