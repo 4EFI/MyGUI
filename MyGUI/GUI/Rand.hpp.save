@@ -1,0 +1,15 @@
+#include <time.h>
+#include <iostream.h>
+
+template <typename type>
+type Rand(type min, type max)
+{
+    static bool timeNull
+    
+    if(min > max)
+    {
+        swap(min, max);
+    }
+
+    return (rand() % (max - min + 1) + min);
+}

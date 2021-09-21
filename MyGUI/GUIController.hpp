@@ -7,6 +7,7 @@
 #include "GUI/RectangleSelection.hpp"
 #include "GUI/Slider.hpp"
 #include "GUI/Tools.hpp"
+#include "GUI/Rand.hpp"
 
 void GUIControll()
 {

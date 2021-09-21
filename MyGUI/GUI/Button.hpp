@@ -54,7 +54,8 @@ public:
     bool isPressed();
     bool isClicked();
 
-    bool isCursorInsideBox();
+    void isCursorInsideBox();
+    bool isHovered();
 
     void move           (sf ::Vector2f      position);
     void setTexture     (sf ::Texture       texture);
@@ -227,7 +228,7 @@ bool Button::isClicked()
 
 //-----------------------------------------------------------------------------
 
-bool Button::isCursorInsideBox()
+void Button::isCursorInsideBox()
 {
     sf::Color color({0, 0, 0, 20});
 
@@ -240,7 +241,19 @@ bool Button::isCursorInsideBox()
     if(IsInsideRect(cursorPosition, &rectangle))
     {
         window->draw(rectChoose);
+    }
+}
 
+//-----------------------------------------------------------------------------
+
+bool Button::isHovered()
+{
+    if(window == NULL) return 0;
+
+    sf::Vector2f cursorPosition = GetCursorPosition(*window);
+
+    if(IsInsideRect(cursorPosition, &rectangle))
+    {
         return 1;
     }
 
